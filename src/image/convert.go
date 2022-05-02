@@ -10,36 +10,39 @@ import (
 	"path/filepath"
 )
 
-func JpegToPng(directory string) []string {
-	files, err := ioutil.ReadDir(directory)
+type Converter struct {
+	Directory string
+}
+
+func (converter Converter) JpegToPng() {
+	files, err := ioutil.ReadDir(converter.Directory)
 	if err != nil {
 		panic(err)
 	}
 
-	var fileNames []string
 	for _, file := range files {
 		fileName := file.Name()
 		if file.IsDir() {
-			fileNames = append(fileNames, JpegToPng(filepath.Join(directory, fileName))...)
+			directory := filepath.Join(converter.Directory, fileName)
+			childConverter := Converter{Directory: directory}
+			childConverter.JpegToPng()
 			continue
 		}
 		if filepath.Ext(fileName) == ".jpeg" || filepath.Ext(fileName) == ".jpg" {
-			convert(directory, file)
-			fileNames = append(fileNames, fileName)
+			converter.convert(file)
 		}
 	}
-	return fileNames
 }
 
-func convert(directory string, fileInfo fs.FileInfo) {
+func (converter Converter) convert(fileInfo fs.FileInfo) {
 	fileName := fileInfo.Name()
-	file, err := os.Open(filepath.Join(directory, fileName))
+	file, err := os.Open(filepath.Join(converter.Directory, fileName))
 	defer file.Close()
 	if err != nil {
 		panic(err)
 	}
 
-	output, err := os.Create(filepath.Join(directory, fileName) + ".png")
+	output, err := os.Create(filepath.Join(converter.Directory, fileName) + ".png")
 	defer output.Close()
 	if err != nil {
 		panic(err)
