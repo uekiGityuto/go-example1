@@ -11,5 +11,5 @@ func main() {
 	)
 	flag.Parse()
 	converter := image.Converter{Directory: *directory}
-	converter.JpegToPng()
+	converter.JPEGToPNG()
 }

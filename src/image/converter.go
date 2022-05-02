@@ -14,7 +14,7 @@ type Converter struct {
 	Directory string
 }
 
-func (converter Converter) JpegToPng() {
+func (converter Converter) JPEGToPNG() {
 	files, err := ioutil.ReadDir(converter.Directory)
 	if err != nil {
 		panic(err)
@@ -25,7 +25,7 @@ func (converter Converter) JpegToPng() {
 		if file.IsDir() {
 			directory := filepath.Join(converter.Directory, fileName)
 			childConverter := Converter{Directory: directory}
-			childConverter.JpegToPng()
+			childConverter.JPEGToPNG()
 			continue
 		}
 		if filepath.Ext(fileName) == ".jpeg" || filepath.Ext(fileName) == ".jpg" {
