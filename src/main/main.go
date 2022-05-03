@@ -2,7 +2,9 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/uekiGityuto/go-example/src/image"
+	"os"
 )
 
 func main() {
@@ -11,5 +13,10 @@ func main() {
 	)
 	flag.Parse()
 	converter := image.Converter{Directory: *directory}
-	converter.JPEGToPNG()
+	if err := converter.JPEGToPNG(); err != nil {
+		fmt.Fprintln(os.Stderr, "Error while converting images:", err)
+		os.Exit(1)
+	} else {
+		fmt.Println("Completed")
+	}
 }

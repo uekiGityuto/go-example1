@@ -14,10 +14,10 @@ type Converter struct {
 	Directory string
 }
 
-func (converter Converter) JPEGToPNG() {
+func (converter Converter) JPEGToPNG() error {
 	files, err := ioutil.ReadDir(converter.Directory)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	for _, file := range files {
@@ -29,32 +29,37 @@ func (converter Converter) JPEGToPNG() {
 			continue
 		}
 		if filepath.Ext(fileName) == ".jpeg" || filepath.Ext(fileName) == ".jpg" {
-			converter.convert(file)
+			if err := converter.convert(file); err != nil {
+				return err
+			}
 		}
 	}
+	return nil
 }
 
-func (converter Converter) convert(fileInfo fs.FileInfo) {
+func (converter Converter) convert(fileInfo fs.FileInfo) error {
 	fileName := fileInfo.Name()
 	file, err := os.Open(filepath.Join(converter.Directory, fileName))
 	defer file.Close()
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	output, err := os.Create(filepath.Join(converter.Directory, fileName) + ".png")
 	defer output.Close()
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	img, _, err := image.Decode(file)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	err = png.Encode(output, img)
 	if err != nil {
-		panic(err)
+		return err
 	}
+
+	return nil
 }
