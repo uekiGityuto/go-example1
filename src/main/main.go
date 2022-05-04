@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/uekiGityuto/go-example/src/image"
+	"github.com/uekiGityuto/go-example1/src/image"
 	"os"
 )
 
