@@ -1,6 +1,7 @@
 package image
 
 import (
+	"fmt"
 	"image"
 	_ "image/jpeg"
 	"image/png"
@@ -17,7 +18,7 @@ type Converter struct {
 func (converter Converter) JPEGToPNG() error {
 	files, err := ioutil.ReadDir(converter.Directory)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to find target directory: %w", err)
 	}
 
 	for _, file := range files {
@@ -42,23 +43,23 @@ func (converter Converter) convert(fileInfo fs.FileInfo) error {
 	file, err := os.Open(filepath.Join(converter.Directory, fileName))
 	defer file.Close()
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to open source file: %w", err)
 	}
 
 	output, err := os.Create(filepath.Join(converter.Directory, fileName) + ".png")
 	defer output.Close()
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to create file: %w", err)
 	}
 
 	img, _, err := image.Decode(file)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to decode source file: %w", err)
 	}
 
 	err = png.Encode(output, img)
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to encode decoded file: %w", err)
 	}
 
 	return nil
