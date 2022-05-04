@@ -11,10 +11,12 @@ import (
 	"path/filepath"
 )
 
+// Converter JPEGをPNGに変換するための構造体
 type Converter struct {
 	Directory string
 }
 
+// JPEGToPNG JPEGをPNGに変換する
 func (converter Converter) JPEGToPNG() error {
 	files, err := ioutil.ReadDir(converter.Directory)
 	if err != nil {

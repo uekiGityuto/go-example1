@@ -7,6 +7,7 @@ import (
 	"os"
 )
 
+// JPEGをPNGに変換する関数
 func main() {
 	var (
 		directory = flag.String("directory", "resources", "target directory")
